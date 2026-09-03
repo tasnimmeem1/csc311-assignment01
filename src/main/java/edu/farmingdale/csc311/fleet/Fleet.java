@@ -4,7 +4,7 @@ package edu.farmingdale.csc311.fleet;
  * A named group of vehicles stored in a plain array.
  * No ArrayList, no HashMap. Arrays and loops only.
  *
- * @author YOUR NAME HERE
+ * @author Shahla Tasnim Meem
  */
 public class Fleet {
 
@@ -49,39 +49,99 @@ public class Fleet {
      *        insertion order. Returning the internal array lets a caller
      *        overwrite your slots, so copy it.
      * ------------------------------------------------------------------ */
+    private final String name;
+    private final Vehicle[] vehicles;
+    private int count;
 
     public Fleet(String name) {
-        throw new UnsupportedOperationException("TODO-08");
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("name: " + name);
+        }
+
+        this.name = name.trim();
+        this.vehicles = new Vehicle[MAX_VEHICLES];
+        this.count = 0;
     }
 
     public String getName() {
-        throw new UnsupportedOperationException("TODO-08");
+        return name;
     }
 
     public boolean contains(Vehicle vehicle) {
-        throw new UnsupportedOperationException("TODO-08");
+        for (int i = 0; i < count; i++) {
+            if (vehicles[i].equals(vehicle)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean add(Vehicle vehicle) {
-        throw new UnsupportedOperationException("TODO-08");
+        if (vehicle == null) {
+            throw new IllegalArgumentException("vehicle: " + vehicle);
+        }
+
+        if (contains(vehicle)) {
+            return false;
+        }
+
+        if (count == MAX_VEHICLES) {
+            return false;
+        }
+
+        vehicles[count] = vehicle;
+        count++;
+        return true;
     }
 
     public boolean removeByVin(String vin) {
-        throw new UnsupportedOperationException("TODO-08");
+        if (vin == null || vin.isBlank()) {
+            return false;
+        }
+
+        for (int i = 0; i < count; i++) {
+            if (vehicles[i].getVin().equalsIgnoreCase(vin.trim())) {
+
+                for (int j = i; j < count - 1; j++) {
+                    vehicles[j] = vehicles[j + 1];
+                }
+
+                vehicles[count - 1] = null;
+                count--;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Vehicle findByVin(String vin) {
-        throw new UnsupportedOperationException("TODO-08");
+        if (vin == null || vin.isBlank()) {
+            return null;
+        }
+
+        for (int i = 0; i < count; i++) {
+            if (vehicles[i].getVin().equalsIgnoreCase(vin.trim())) {
+                return vehicles[i];
+            }
+        }
+
+        return null;
     }
 
     public int size() {
-        throw new UnsupportedOperationException("TODO-08");
+        return count;
     }
 
     public Vehicle[] toArray() {
-        throw new UnsupportedOperationException("TODO-08");
-    }
+        Vehicle[] copy = new Vehicle[count];
 
+        for (int i = 0; i < count; i++) {
+            copy[i] = vehicles[i];
+        }
+
+        return copy;
+    }
     /* ------------------------------------------------------------------
      * TODO-09     commit: TODO-09: implement Fleet reports
      *
